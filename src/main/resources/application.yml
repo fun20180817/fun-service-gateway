@@ -1,0 +1,58 @@
+server:
+  port: 8888
+  
+spring:
+  application:
+    name: fun-service-gateway
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    timeout: 50          
+    password: 1234
+    pool:
+      max-idle: 20
+      max-wait: -1    
+
+security:
+  user:
+    name: fun20180817
+    password: fun20180817
+    
+eureka:
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+    metadata-map:
+      instanceId: ${spring.application.name}:${random.value}
+  client:
+    registerWithEureka: true
+    fetch-registry: true
+    service-url:      
+      defaultZone: http://${security.user.name}:${security.user.password}@${eureka.instance.hostname}:8761/eureka/      
+
+zuul:
+  ribbon:
+    eager-load:
+      enabled: true
+  sensitiveHeaders: Cookie,Set-Cookie
+  ignored-headers: Access-Control-Allow-Credentials, Access-Control-Allow-Orig
+  host:
+    connect-timeout-millis: 20000
+    socket-timeout-millis: 20000
+    max-per-route-connections: 50
+    max-total-connections: 600
+    
+ribbon:
+  ReadTimeout: 20000
+  ConnectTimeout: 20000
+  MaxAutoRetries: 0
+  MaxAutoRetriesNextServer: 1
+  eureka:
+    enable: true    
+
+
+
+
+  
+  
+  

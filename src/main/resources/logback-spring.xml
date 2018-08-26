@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+	<jmxConfigurator />
+	
+	<!-- 服务名称  从bootstrap.yml配置文件中获取服务名 -->
+	<springProperty scope="context" name="SERVICE_NAME" source="spring.application.name" />
+	
+	<!-- 日志文件格式化 -->
+	<property name="FILE_LOG_PATTERN" value="%d{yyyy-MM-dd'T'HH:mm:ss.SSSZ} ${LOG_LEVEL_PATTERN:-%5p} [%15.15t] %-40.40logger{39} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
+	
+	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">   
+        <file>/data/fun/log/${SERVICE_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">   
+            <fileNamePattern>/data/fun/log/${SERVICE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>   
+            <maxHistory>14</maxHistory>
+        </rollingPolicy>  
+        <encoder>  
+            <pattern>${FILE_LOG_PATTERN}</pattern>  
+            <charset>UTF-8</charset> <!-- 此处设置字符集 -->  
+        </encoder>  
+    </appender>  
+	
+	<root level="INFO">
+		<appender-ref ref="FILE" />
+	</root>
+	
+	<logger name="springframework.cloud.spring-cloud-starter-sleuth" level="INFO" additivity="false">
+		<appender-ref ref="FILE" />
+	</logger>
+</configuration>
